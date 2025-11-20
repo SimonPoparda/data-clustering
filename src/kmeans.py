@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
+from src.decorators import log_time
 
 class BaseClustering(ABC):
     """Abstract class for clustering models"""
-
     @abstractmethod
     def fit(self, X: pd.DataFrame):
         """Fit the model to the data."""
@@ -39,6 +39,7 @@ class KMeansCustom(BaseClustering):
         """Getter for number of iterations of the model"""
         return self.n_iterations
     
+    @log_time
     def fit(self, X: pd.DataFrame):
         """Method that trains the model by finding the centroids""" 
         X = X.to_numpy()

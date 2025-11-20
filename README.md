@@ -13,7 +13,12 @@
 * Pod powyższym linkiem można znaleźć jego opis
 
 ## Sposób uruchamiania
-* main.py + requirements.txt
+* instalowanie zależności: pip install -r requirements.txt 
+
+* uruchomienie programu: python main.py
+
+* uruchomienie testów: pytest tests/
 
 ## Wnioski
+* Projekt wykorzystuje Pythona i jego biblioteki do stworzenia implementacji KMeans do przeprowadzenia klasteryzacji danych numerycznych. Wykorzystuje OOP, abstrakcje, hermetyzacje, dekoratory i posługuje się modularną strukturą dla czytelności kodu. Pozwala również na wizualizację wyników przy użyciu biblioteki matplotlib.
 

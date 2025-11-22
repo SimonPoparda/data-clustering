@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from collections import deque
+from src.decorators import log_time
 
 class Inputer:
     """Class to accept user input"""
@@ -42,6 +43,7 @@ class MockDataGenerator:
         self._source_df = df.copy()
         self._mock_df = None
 
+    @log_time
     def generate_and_write_mock_df(self, n_rows: int = 150, path: str = '', random_state = None) -> pd.DataFrame:
         """Generate a mock DataFrame using a queue to cycle columns."""
 
@@ -50,20 +52,20 @@ class MockDataGenerator:
         if not numeric_cols:
             raise ValueError('Brak numerycznych kolumn w danych')
 
-        col_queue = deque(numeric_cols)
-        mock_data = {col: [] for col in numeric_cols}
+        col_queue = deque(numeric_cols) # create a two-side queue for columns
+        mock_data = {col: [] for col in numeric_cols} # create dict for mock data
 
-        for i in range(n_rows):
-            col = col_queue.popleft()
-            mean = float(self._source_df[col].mean())
-            std = float(self._source_df[col].std())
-            if std <= 0:
-                std = 0.1  # prevent zero std
+        for _ in range(n_rows):
+            col = col_queue.popleft() # pop first element of the queue from the left
+            for col in numeric_cols:
+                mean = float(self._source_df[col].mean()) # calculate mean for the result of pop
+                std = float(self._source_df[col].std()) # calculate std for the result of pop
+                if std <= 0:
+                    std = 0.1  # prevent zero std
 
-            # generate a single random value
-            value = rng.normal(loc=mean, scale=std, size=1)[0]
-            mock_data[col].append(value)
-            col_queue.append(col)
+                # generate a single random value
+                mock_data[col].append(rng.normal(loc=mean, scale=std))
+            col_queue.append(col) # move current at the end
 
         mock_df = pd.DataFrame(mock_data)
 
